@@ -1,0 +1,12 @@
+torch
+torchvision
+transformers>=4.45.0
+accelerate
+pillow
+pyyaml
+python-levenshtein
+python-dotenv
+qwen-vl-utils 
+matplotlib
+huggingface-hub>=0.25.0
+num2words

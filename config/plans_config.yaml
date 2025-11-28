@@ -1,0 +1,11 @@
+plan_omr_qwen2_vl:
+  description: "OMR using Qwen2-VL-2B"
+  model_key: "qwen2_vl_2b"
+  prompt_key: "omr_abc_strict"
+  data_limit: -1
+
+plan_omr_smolvlm:
+  description: "OMR using SmolVLM2-2.2B"
+  model_key: "smolvlm2_2b"
+  prompt_key: "omr_abc_strict"
+  data_limit: -1

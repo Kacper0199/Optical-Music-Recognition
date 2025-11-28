@@ -1,0 +1,22 @@
+qwen2_vl_2b:
+  model_id: "Qwen/Qwen2-VL-2B-Instruct"
+  trust_remote_code: true
+  device_map: "auto"
+  model_kwargs:
+    dtype: "bfloat16"
+    low_cpu_mem_usage: true
+  generate_kwargs:
+    max_new_tokens: 512
+    temperature: 0.1
+    top_p: 0.5
+
+smolvlm2_2b:
+  model_id: "HuggingFaceTB/SmolVLM2-2.2B-Instruct"
+  trust_remote_code: true
+  device_map: "auto"
+  model_kwargs:
+    dtype: "bfloat16"
+  generate_kwargs:
+    max_new_tokens: 1024
+    do_sample: false
+    repetition_penalty: 1.1
