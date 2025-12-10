@@ -60,6 +60,10 @@ class ModelClientQwen2VL:
             logger.info("Moving model to MPS (Apple Silicon GPU)...")
             self.model.to('mps')
 
+        if torch.cuda.is_available() and self.model.device.type == 'cpu':
+            logger.info("Moving model to CUDA GPU ...")
+            self.model.to("cuda")
+
         logger.info(f"Model loaded successfully on device: {self.model.device}")
 
     def generate(self, image_path, prompt_text):
@@ -135,6 +139,10 @@ class ModelClientSmolVLM:
         if torch.backends.mps.is_available() and self.model.device.type == 'cpu':
             logger.info("Moving model to MPS (Apple Silicon GPU)...")
             self.model.to('mps')
+
+        if torch.cuda.is_available() and self.model.device.type == 'cpu':
+            logger.info("Moving model to CUDA GPU ...")
+            self.model.to("cuda")
 
         logger.info(f"Model loaded successfully on device: {self.model.device}")
 
