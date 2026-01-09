@@ -1,0 +1,4 @@
+M:3/4
+L:1/4
+K:C
+^C ^D ^F |  ^G _B z | z z _D | _E _G _A | ^A z z |

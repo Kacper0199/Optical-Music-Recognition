@@ -1,0 +1,4 @@
+M:2/4
+L:1/4
+K:Cb
+=C =D | =E =F | =G =A | =B =c |  C D | E F | G A | B c ||
