@@ -118,7 +118,7 @@ Use this mode for large-scale models like Gemma 3 27B and InternVL 3 78B. This s
 
 *   **Access**: You need access to the Athena cluster at Cyfronet.
 *   **Grant**: A valid PLGrid computing grant with GPU resources (specifically `plgrid-gpu-a100`).
-*   **Resources**: Athena provides nodes with NVIDIA A100 (40GB/80GB) GPUs.
+*   **Resources**: Athena provides nodes with NVIDIA A100 (40GB) GPUs.
     *   Documentation: [Athena Docs](https://docs.cyfronet.pl/spaces/~plgpawlik/pages/126648338/Athena)
 
 #### Running on Athena
