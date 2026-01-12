@@ -20,3 +20,20 @@ smolvlm2_2b:
     max_new_tokens: 1024
     do_sample: false
     repetition_penalty: 1.1
+
+gemma_3_27b_vllm:
+  model_id: "google/gemma-3-27b-it"
+  api_base: "http://localhost:8000/v1"
+  model_kwargs: {} # vLLM server will pass arguments
+  generate_kwargs:
+    max_new_tokens: 1024
+    temperature: 0.1
+    top_p: 0.95
+
+internvl3_78b_vllm:
+  model_id: "OpenGVLab/InternVL3-78B"
+  api_base: "http://localhost:8000/v1"
+  generate_kwargs:
+    max_new_tokens: 1024
+    temperature: 0.0
+    top_p: 1.0

@@ -35,9 +35,12 @@ def run_pipeline(config_dir):
     try:
         model_cfg = models_cfg[active_plan['model_key']]
         prompt_text = prompts_cfg['prompts'][active_plan['prompt_key']]['text']
+        
+        line_range = active_plan.get('line_range', None)
 
         client = get_model_client(model_cfg)
-        data_items = load_data_folders(paths_cfg['data_root'], active_plan['data_limit'])
+        
+        data_items = load_data_folders(paths_cfg['data_root'], active_plan['data_limit'], line_range=line_range)
 
         total_accuracy_sum = 0.0
         scored_items = 0

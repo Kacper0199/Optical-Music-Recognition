@@ -9,3 +9,17 @@ plan_omr_smolvlm:
   model_key: "smolvlm2_2b"
   prompt_key: "omr_abc_strict"
   data_limit: -1
+
+plan_omr_gemma3_vllm:
+  description: "OMR using Gemma 3 27B via vLLM on Athena"
+  model_key: "gemma_3_27b_vllm"
+  prompt_key: "omr_abc_strict"
+  data_limit: -1
+  line_range: [0, 10] # music lines selection
+
+plan_omr_internvl3:
+  description: "OMR using InternVL3-78B via vLLM on Athena"
+  model_key: "internvl3_78b_vllm"
+  prompt_key: "omr_abc_long"
+  data_limit: -1
+  line_range: [0, 10]
