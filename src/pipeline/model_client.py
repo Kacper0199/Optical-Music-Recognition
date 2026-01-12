@@ -1,6 +1,9 @@
 import logging
 import torch
+import base64
+import requests
 from PIL import Image
+from io import BytesIO
 from transformers import (
     Qwen2VLForConditionalGeneration,
     AutoProcessor,
@@ -26,6 +29,65 @@ def _clean_omr_response(text):
         text = "M:" + text.split("M:", 1)[1]
 
     return text.strip()
+
+
+def _encode_image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+class ModelClientVLLM:
+    def __init__(self, model_config):
+        self.model_id = model_config['model_id']
+        self.api_base = model_config.get('api_base', "http://localhost:8000/v1")
+        self.gen_kwargs = model_config.get('generate_kwargs', {})
+        logger.info(f"Initialized VLLM Client for {self.model_id} at {self.api_base}")
+
+    def generate(self, image_path, prompt_text):
+        try:
+            base64_image = _encode_image_to_base64(image_path)
+            image_url = f"data:image/png;base64,{base64_image}"
+
+            messages = [
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image_url", 
+                            "image_url": {
+                                "url": image_url,
+                                "detail": "high"
+                            }
+                        },
+                        {
+                            "type": "text", 
+                            "text": prompt_text
+                        }
+                    ]
+                }
+            ]
+
+            payload = {
+                "model": self.model_id,
+                "messages": messages,
+                "max_tokens": self.gen_kwargs.get("max_new_tokens", 1024),
+                "temperature": 0.2,
+                "top_p": 0.95
+            }
+
+            response = requests.post(f"{self.api_base}/chat/completions", json=payload)
+            if response.status_code != 200:
+                logger.error(f"vLLM Error {response.status_code}: {response.text}")
+                return ""
+            
+            response.raise_for_status()
+            result = response.json()
+            raw_response = result['choices'][0]['message']['content']
+            
+            return _clean_omr_response(raw_response)
+
+        except Exception as e:
+            logger.error(f"VLLM Generation error for {image_path}: {e}")
+            return ""
 
 
 class ModelClientQwen2VL:
@@ -192,9 +254,13 @@ class ModelClientSmolVLM:
 def get_model_client(model_config):
     model_id = model_config['model_id'].lower()
 
-    if "qwen" in model_id:
+    if "gemma" in model_id and "vllm" in model_config.get("api_base", "").lower():
+        return ModelClientVLLM(model_config)
+    elif "gemma" in model_id:
+        return ModelClientVLLM(model_config) 
+    elif "qwen" in model_id:
         return ModelClientQwen2VL(model_config)
     elif "smolvlm" in model_id:
         return ModelClientSmolVLM(model_config)
     else:
-        raise ValueError(f"No client implementation found for model: {model_id}")
+        return ModelClientVLLM(model_config)

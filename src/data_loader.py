@@ -1,10 +1,11 @@
 import logging
 from pathlib import Path
+import re
 
 logger = logging.getLogger(__name__)
 
 
-def load_data_folders(data_root, limit=-1):
+def load_data_folders(data_root, limit=-1, line_range=None):
     data_path = Path(data_root).resolve()
     valid_items = []
 
@@ -16,6 +17,17 @@ def load_data_folders(data_root, limit=-1):
 
     for dir_path in sorted_dirs:
         folder_id = dir_path.name
+
+        if line_range is not None:
+            # Pattern line_XXX
+            match = re.search(r"line_(\d+)", folder_id)
+            if match:
+                line_num = int(match.group(1))
+                if not (line_range[0] <= line_num <= line_range[1]):
+                    continue
+            else:
+                # no matching pattern line_XXX
+                continue
 
         possible_exts = ['.png', '.jpg', '.jpeg']
         image_path = None
@@ -38,5 +50,5 @@ def load_data_folders(data_root, limit=-1):
     if limit != -1:
         valid_items = valid_items[:limit]
 
-    logger.info(f"Loaded {len(valid_items)} data folders.")
+    logger.info(f"Loaded {len(valid_items)} data folders (Line range: {line_range}).")
     return valid_items

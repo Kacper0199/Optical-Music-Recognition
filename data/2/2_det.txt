@@ -1,4 +1,0 @@
-M:4/4
-L:1/4
-K:C
-E E F2 | E E F2 | E G C D | E4 |

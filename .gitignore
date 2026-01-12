@@ -19,9 +19,9 @@ ENV/
 *.bin
 *.pth
 *.h5
-logs/*
-!logs/.gitkeep
-!logs/*.png
+logs/
 .idea/
 .vscode/
 *.swp
+omr_venv_athena/
+=*
