@@ -191,4 +191,3 @@ The system outputs strict ABC notation:
 *   **Local Execution**: Limited by available VRAM. Large models (27B+) cannot run locally on most consumer hardware.
 *   **vLLM Overhead**: Starting the vLLM server takes time (loading weights). SLURM jobs must request sufficient time limits.
 *   **Complex Notation**: While simple melodies are recognized well, complex polyphony and dense chords remain challenging.
-```
