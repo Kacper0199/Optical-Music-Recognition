@@ -6,6 +6,8 @@ This project implements an Optical Music Recognition pipeline designed to transc
 
 The pipeline manages the entire lifecycle: environment setup, model caching, inference via direct loading or API server, resource monitoring, and evaluation against ground truth data.
 
+![schema](images/schema.png)
+
 ## Project Structure
 
 ### Source & Configuration
