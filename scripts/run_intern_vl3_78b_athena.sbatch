@@ -1,10 +1,10 @@
 #!/bin/bash -l
 #SBATCH -J OMR_INTERNVL
 #SBATCH -N 1
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:8
 #SBATCH -p plgrid-gpu-a100
 #SBATCH -A GRANT_NAME
-#SBATCH --mem=256G
+#SBATCH --mem=512G
 #SBATCH --time=04:00:00
 #SBATCH --output="logs/athena_run_intern_vl3_78b.out"
 #SBATCH --error="logs/athena_run_intern_vl3_78b.err"
@@ -27,6 +27,9 @@ fi
 
 echo "Project root detected at: $PROJECT_DIR"
 export PYTHONPATH="${PROJECT_DIR}"
+
+export VLLM_USE_V1=0
+export NCCL_DEBUG=WARN
 
 # Scratch and cache config
 export SCRATCH_DIR="/net/tscratch/people/$USER"
@@ -86,10 +89,11 @@ echo "Starting vLLM server..."
 
 python3 -m vllm.entrypoints.openai.api_server \
     --model $MODEL_ID \
-    --tensor-parallel-size 4 \
+    --tensor-parallel-size 8 \
     --dtype bfloat16 \
     --trust-remote-code \
-    --gpu-memory-utilization 0.90 \
+    --gpu-memory-utilization 0.95 \
+    --max-model-len 4096 \
     --enforce-eager \
     --port 8000 \
     --disable-log-requests > logs/vllm_server.log 2>&1 &
@@ -97,7 +101,7 @@ python3 -m vllm.entrypoints.openai.api_server \
 VLLM_PID=$!
 
 echo "Waiting for vLLM to be ready..."
-for i in {1..360}; do
+for i in {1..600}; do
     if curl -s http://localhost:8000/v1/models > /dev/null; then
         echo "vLLM Ready!"
         break
